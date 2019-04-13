@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+
 
 class SignUpViewController: UIViewController {
 
@@ -25,14 +27,17 @@ class SignUpViewController: UIViewController {
         tf.borderStyle = .roundedRect
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.font = UIFont.systemFont(ofSize: 14)
+        tf.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return tf
     }()
     
     let passwordTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Password"
+        tf.isSecureTextEntry = true
         tf.borderStyle = .roundedRect
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
+        tf.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         tf.font = UIFont.systemFont(ofSize: 14)
         return tf
     }()
@@ -59,9 +64,10 @@ class SignUpViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
         button.isEnabled = false
+        button.backgroundColor = UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
         button.layer.cornerRadius = 5
+        button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
         return button
     }()
     
@@ -100,14 +106,34 @@ class SignUpViewController: UIViewController {
 
     
     // MARK: - Handler
+    
+    @objc func formValidation(){
+        guard
+            emailTextField.hasText,
+            passwordTextField.hasText else {
+            
+                signUpButton.isEnabled = false
+                signUpButton.backgroundColor = UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
+                return
+        }
+        signUpButton.isEnabled = true
+        signUpButton.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+    }
+    
 
     @objc func handleShowLogin(){
         _ = navigationController?.popViewController(animated: true)
     }
     
+    @objc func handleSignUp(){
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        
+    }
+    
     func configureViewComponents() {
         
-        let stackView = UIStackView(arrangedSubviews: [emailTextField,fullNameTextField, usernameTextField  , passwordTextField, signUpButton])
+        let stackView = UIStackView(arrangedSubviews: [emailTextField, fullNameTextField, usernameTextField, passwordTextField, signUpButton])
         
         stackView.axis = .vertical
         stackView.spacing = 10

@@ -37,6 +37,7 @@ class LoginViewController: UIViewController {
     let passwordTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Password"
+        tf.isSecureTextEntry = true
         tf.borderStyle = .roundedRect
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.font = UIFont.systemFont(ofSize: 14)
@@ -48,7 +49,6 @@ class LoginViewController: UIViewController {
         button.setTitle("Login", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
-        button.isEnabled = false
         button.layer.cornerRadius = 5
         return button
     }()
@@ -68,7 +68,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         view.backgroundColor = .white
     
         navigationController?.navigationBar.isHidden = true
